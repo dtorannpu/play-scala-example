@@ -1,5 +1,11 @@
-@()
+@(articles:Seq[models.Article])
 
 @main("Articles") {
     <h1>Articles</h1>
+
+    <ul>
+    @for(article <- articles) {
+        <li>@article.title</li>
+    }
+    </ul>
 }
