@@ -34,4 +34,6 @@ class ArticleRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
       into ((titleBody, id) => Article(id, titleBody._1, titleBody._2))
       ) += (title, body)
   }
+
+  def findById(id: Long): Future[Option[Article]] = db.run(article.filter(_.id === id).result.headOption)
 }

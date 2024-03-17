@@ -1,11 +1,13 @@
-@(articles:Seq[models.Article])
+@(articles: Seq[models.Article])
 
 @main("Articles") {
     <h1>Articles</h1>
 
     <ul>
     @for(article <- articles) {
-        <li>@article.title</li>
+        <li>
+            <a href="/articles/@article.id">@article.title</a>
+        </li>
     }
     </ul>
 }

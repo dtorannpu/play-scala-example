@@ -11,4 +11,11 @@ class ArticlesController @Inject(articleRepository: ArticleRepository)(val contr
   def index() = Action.async { implicit request: Request[AnyContent] =>
     articleRepository.list().map(articles => Ok(views.html.articles.index(articles)))
   }
+
+  def show(id:Long) = Action.async { implicit request: Request[AnyContent] =>
+    articleRepository.findById(id).map {
+      case Some(article) => Ok(views.html.articles.show(article))
+      case None => NotFound("ページが存在しません。")
+    }
+  }
 }
