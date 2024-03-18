@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class ArticlesController @Inject(articleRepository: ArticleRepository)(val controllerComponents: ControllerComponents)(implicit ec: ExecutionContext) extends BaseController {
   def index() = Action.async { implicit request: Request[AnyContent] =>
-    articleRepository.list().map(articles => Ok(views.html.articles.index(articles)))
+    articleRepository.all().map(articles => Ok(views.html.articles.index(articles)))
   }
 
   def show(id:Long) = Action.async { implicit request: Request[AnyContent] =>

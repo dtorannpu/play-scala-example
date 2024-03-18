@@ -1,19 +1,15 @@
 package repositories
 
 import models.Article
-import play.api.db.slick.DatabaseConfigProvider
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ArticleRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
-  private val dbConfig = dbConfigProvider.get[JdbcProfile]
-
-  import dbConfig.*
+class ArticleRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api.*
-
   private class ArticleTable(tag: Tag) extends Table[Article](tag, "article") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
@@ -21,12 +17,12 @@ class ArticleRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
 
     def body = column[String]("body")
 
-    def * = (id, title, body) <> ((Article.apply).tupled, Article.unapply)
+    def * = (id, title, body) <> (Article.apply, Article.unapply)
   }
 
   private val article = TableQuery[ArticleTable]
 
-  def list(): Future[Seq[Article]] = db.run(article.result)
+  def all(): Future[Seq[Article]] = db.run(article.result)
 
   def create(title: String, body: String): Future[Article] = db.run {
     (article.map(a => (a.title, a.body))
