@@ -1,0 +1,14 @@
+@(articleForm: Form[ArticleData])(implicit request: RequestHeader, messages: MessagesProvider)
+
+@import helper._
+
+@main("Articles") {
+    <h1>New Article</h1>
+
+    @helper.form(action = routes.ArticlesController.create()) {
+        @CSRF.formField
+        @helper.inputText(articleForm("title"))
+        @helper.textarea(articleForm("body"))
+        <input type="submit">
+    }
+}
