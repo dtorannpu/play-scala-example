@@ -1,0 +1,10 @@
+@(action: play.api.mvc.Call, articleForm: Form[ArticleData])(implicit request: RequestHeader, messages: MessagesProvider)
+
+@import helper._
+
+@helper.form(action = action) {
+    @CSRF.formField
+    @helper.inputText(articleForm("title"))
+    @helper.textarea(articleForm("body"))
+    <input type="submit">
+}

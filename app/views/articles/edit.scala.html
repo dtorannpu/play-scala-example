@@ -1,14 +1,7 @@
 @(id: Long, articleForm: Form[ArticleData])(implicit request: RequestHeader, messages: MessagesProvider)
 
-@import helper._
+    @main("Articles") {
+        <h1>Edit Article</h1>
 
-@main("Articles") {
-    <h1>Edit Article</h1>
-
-    @helper.form(action = routes.ArticlesController.update(id)) {
-        @CSRF.formField
-        @helper.inputText(articleForm("title"))
-        @helper.textarea(articleForm("body"))
-        <input type="submit">
+        @form(routes.ArticlesController.update(id), articleForm)
     }
-}
