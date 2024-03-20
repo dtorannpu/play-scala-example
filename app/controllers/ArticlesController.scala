@@ -15,7 +15,7 @@ object ArticleData {
 }
 
 @Singleton
-class ArticlesController @Inject(articleRepository: ArticleRepository)(val mcc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(mcc) {
+class ArticlesController @Inject()(val articleRepository: ArticleRepository, val mcc: MessagesControllerComponents)(implicit ec: ExecutionContext) extends MessagesAbstractController(mcc) {
 
 
   val articleForm: Form[ArticleData] = Form(
@@ -30,10 +30,7 @@ class ArticlesController @Inject(articleRepository: ArticleRepository)(val mcc: 
   }
 
   def show(id: Long): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    articleRepository.findById(id).map {
-      case Some(article) => Ok(views.html.articles.show(article))
-      case None => NotFound("ページが存在しません。")
-    }
+    articleRepository.findById(id).map(_.fold(NotFound) { article => Ok(views.html.articles.show(article)) })
   }
 
   def newArticle: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
@@ -49,6 +46,23 @@ class ArticlesController @Inject(articleRepository: ArticleRepository)(val mcc: 
         },
         articleData => {
           articleRepository.create(articleData.title, articleData.body).map(a => Redirect(routes.ArticlesController.show(a.id)))
+        }
+      )
+  }
+
+  def edit(id: Long): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    articleRepository.findById(id).map(_.fold(NotFound) { article => Ok(views.html.articles.edit(article.id, articleForm.fill(ArticleData(article.title, article.body)))) })
+  }
+
+  def update(id: Long): Action[AnyContent] = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    articleForm
+      .bindFromRequest()
+      .fold(
+        formWithErrors => {
+          Future.successful(BadRequest(views.html.articles.edit(id, formWithErrors)))
+        },
+        articleData => {
+          articleRepository.update(id, articleData.title, articleData.body).map(a => Redirect(routes.ArticlesController.show(id)))
         }
       )
   }

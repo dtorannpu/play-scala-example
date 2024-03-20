@@ -3,4 +3,8 @@
 @main("Article") {
     <h1>@article.title</h1>
     <p>@article.body</p>
+
+    <ul>
+        <li><a href="@routes.ArticlesController.edit(article.id)">Edit</a></li>
+    </ul>
 }

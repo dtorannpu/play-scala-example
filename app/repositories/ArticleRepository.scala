@@ -9,7 +9,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ArticleRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends HasDatabaseConfigProvider[JdbcProfile] {
+
   import profile.api.*
+
   private class ArticleTable(tag: Tag) extends Table[Article](tag, "article") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
@@ -29,6 +31,15 @@ class ArticleRepository @Inject()(protected val dbConfigProvider: DatabaseConfig
       returning article.map(_.id)
       into ((titleBody, id) => Article(id, titleBody._1, titleBody._2))
       ) += (title, body)
+  }
+
+  def update(id: Long, title: String, body: String) = {
+    db.run(
+      article
+        .filter(_.id === id)
+        .map(a => (a.title, a.body))
+        .update((title, body))
+    )
   }
 
   def findById(id: Long): Future[Option[Article]] = db.run(article.filter(_.id === id).result.headOption)
