@@ -33,13 +33,17 @@ class ArticleRepository @Inject()(protected val dbConfigProvider: DatabaseConfig
       ) += (title, body)
   }
 
-  def update(id: Long, title: String, body: String) = {
+  def update(id: Long, title: String, body: String): Future[Unit] = {
     db.run(
       article
         .filter(_.id === id)
         .map(a => (a.title, a.body))
         .update((title, body))
-    )
+    ).map(_ => ())
+  }
+
+  def delete(id: Long): Future[Unit] = {
+    db.run(article.filter(_.id === id).delete).map(_ => ())
   }
 
   def findById(id: Long): Future[Option[Article]] = db.run(article.filter(_.id === id).result.headOption)

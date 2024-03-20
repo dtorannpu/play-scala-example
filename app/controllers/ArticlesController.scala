@@ -66,4 +66,8 @@ class ArticlesController @Inject()(val articleRepository: ArticleRepository, val
         }
       )
   }
+
+  def delete(id: Long) : Action[AnyContent] = Action.async {
+    articleRepository.delete(id).map(_ => Ok)
+  }
 }

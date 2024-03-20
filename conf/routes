@@ -9,9 +9,11 @@ GET     /                           controllers.HomeController.index()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-GET  /articles          controllers.ArticlesController.index()
-GET  /articles/new      controllers.ArticlesController.newArticle()
-GET  /articles/:id      controllers.ArticlesController.show(id:Long)
-POST /articles/cteate   controllers.ArticlesController.create()
-GET  /articles/:id/edit controllers.ArticlesController.edit(id: Long)
-POST /articles/:id/edit controllers.ArticlesController.update(id: Long)
+GET    /articles            controllers.ArticlesController.index()
+GET    /articles/new        controllers.ArticlesController.newArticle()
+GET    /articles/:id        controllers.ArticlesController.show(id:Long)
+POST   /articles/cteate     controllers.ArticlesController.create()
+GET    /articles/:id/edit   controllers.ArticlesController.edit(id: Long)
+POST   /articles/:id/edit   controllers.ArticlesController.update(id: Long)
++ nocsrf
+DELETE /artilces/:id        controllers.ArticlesController.delete(id: Long)

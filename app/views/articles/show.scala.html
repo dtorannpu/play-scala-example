@@ -1,10 +1,17 @@
-@(article: models.Article)
+@(article: models.Article)(implicit req: RequestHeader)
 
 @main("Article") {
+    @helper.javascriptRouter("jsRoutes")(
+        routes.javascript.ArticlesController.delete
+    )
+
     <h1>@article.title</h1>
     <p>@article.body</p>
 
     <ul>
         <li><a href="@routes.ArticlesController.edit(article.id)">Edit</a></li>
+        <li><a href="#" onclick="confirmDelete(@article.id, 'Are you sure?', '@routes.ArticlesController.index()')">Delete</a></li>
     </ul>
+
+    <script src="@routes.Assets.versioned("javascripts/articles/main.js")" type="text/javascript"></script>
 }
