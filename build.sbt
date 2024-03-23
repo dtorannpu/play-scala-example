@@ -14,6 +14,7 @@ libraryDependencies ++= Seq(
   "org.playframework" %% "play-slick-evolutions" % "6.1.0"
 )
 libraryDependencies += "com.mysql" % "mysql-connector-j" % "8.3.0"
+libraryDependencies += "com.h2database" % "h2" % "2.2.224"
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.example.controllers._"

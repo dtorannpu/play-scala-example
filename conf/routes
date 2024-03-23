@@ -4,16 +4,17 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index()
+GET           /                                    controllers.HomeController.index()
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET           /assets/*file                        controllers.Assets.versioned(path="/public", file: Asset)
 
-GET    /articles            controllers.ArticlesController.index()
-GET    /articles/new        controllers.ArticlesController.newArticle()
-GET    /articles/:id        controllers.ArticlesController.show(id:Long)
-POST   /articles/cteate     controllers.ArticlesController.create()
-GET    /articles/:id/edit   controllers.ArticlesController.edit(id: Long)
-POST   /articles/:id/edit   controllers.ArticlesController.update(id: Long)
+GET           /articles                            controllers.ArticlesController.index()
+GET           /articles/new                        controllers.ArticlesController.newArticle()
+GET           /articles/:articleId                 controllers.ArticlesController.show(articleId:Long)
+POST          /articles/cteate                     controllers.ArticlesController.create()
+GET           /articles/:articleId/edit            controllers.ArticlesController.edit(articleId: Long)
+POST          /articles/:articleId/edit            controllers.ArticlesController.update(articleId: Long)
+POST          /articles/:articleId/comments        controllers.ArticlesController.createComment(articleId: Long)
 + nocsrf
-DELETE /artilces/:id        controllers.ArticlesController.delete(id: Long)
+DELETE        /artilces/:articleId                 controllers.ArticlesController.delete(articleId: Long)
